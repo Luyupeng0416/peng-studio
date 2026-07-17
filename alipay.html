@@ -74,6 +74,15 @@ body{background:#f7f7f7;margin:0;padding:0;font-family:"Microsoft YaHei","Helvet
 <script src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://lib.baomitu.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 <script>
+var url_scheme = '';
+
+(function(){
+function getParam(n) {
+  var r = new RegExp('(^|&)' + n + '=([^&]*)(&|$)');
+  var m = window.location.search.substr(1).match(r);
+  return m ? decodeURIComponent(m[2]) : '';
+}
+
 var code = getParam('code') || '';
 var urls = {
   'week': 'https://ur.alipay.com/_2diGdUEQTfNyqisRsPRFvB',
@@ -81,25 +90,60 @@ var urls = {
   '': 'https://ur.alipay.com/_5A8ZVc03NGrsE4KalwpXdm'
 };
 var code_url = urls[code] || urls[''];
-var url_scheme = 'alipays://platformapi/startapp?appId=20000067&url=' + encodeURIComponent(code_url);
-(function(){
-function getParam(n){var r=new RegExp('(^|&)'+n+'=([^&]*)(&|$)');var m=window.location.search.substr(1).match(r);return m?decodeURIComponent(m[2]):''}
-var price=getParam('price')||'0';
-var product=getParam('product')||'未知商品';
-document.getElementById('amountDisplay').innerHTML='&yen;'+price;
-document.getElementById('productName').textContent=product;
-var now=new Date();
-document.getElementById('createTime').textContent=now.getFullYear()+'-'+(now.getMonth()+1).toString().padStart(2,'0')+'-'+now.getDate().toString().padStart(2,'0')+' '+now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+':'+now.getSeconds().toString().padStart(2,'0');
-$('#qrcode').qrcode({text:code_url,width:230,height:230,foreground:'#000000',background:'#ffffff'});
-var totalSec=180;
-var cd=document.getElementById('countdown');
-var timer=setInterval(function(){totalSec--;if(totalSec<=0){clearInterval(timer);cd.textContent='00:00';cd.style.color='red';layer.msg('二维码已过期，请刷新页面重新获取',{icon:2,time:3000});return}var m=Math.floor(totalSec/60);var s=totalSec%60;cd.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;if(totalSec<=30)cd.style.color='red'},1000);
-var isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-if(isMobile){document.querySelector('.open_app').style.display='block'}
+url_scheme = 'alipays://platformapi/startapp?appId=20000067&url=' + encodeURIComponent(code_url);
+
+var price = getParam('price') || '0';
+var product = getParam('product') || '未知商品';
+document.getElementById('amountDisplay').innerHTML = '&yen;' + price;
+document.getElementById('productName').textContent = product;
+var now = new Date();
+document.getElementById('createTime').textContent = now.getFullYear() + '-' + (now.getMonth()+1).toString().padStart(2,'0') + '-' + now.getDate().toString().padStart(2,'0') + ' ' + now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
+
+$("#qrcode").qrcode({text: code_url, width: 230, height: 230, foreground: '#000000', background: '#ffffff'});
+
+var totalSec = 180;
+var cd = document.getElementById('countdown');
+var timer = setInterval(function() {
+  totalSec--;
+  if (totalSec <= 0) {
+    clearInterval(timer);
+    cd.textContent = '00:00';
+    cd.style.color = 'red';
+    layer.msg('二维码已过期，请刷新页面重新获取', {icon: 2, time: 3000});
+    return;
+  }
+  var m = Math.floor(totalSec / 60);
+  var s = totalSec % 60;
+  cd.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  if (totalSec <= 30) cd.style.color = 'red';
+}, 1000);
+
+var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+if (isMobile) {
+  document.querySelector('.open_app').style.display = 'block';
+}
 })();
-function openAlipay(){window.location.href=url_scheme}
-function checkPayment(){var p=getParam('price')||'0';var prod=getParam('product')||'';window.location.href='index.html?paid=1&price='+encodeURIComponent(p)+'&product='+encodeURIComponent(prod)}
-document.querySelector('#orderDetail .arrow').addEventListener('click',function(){var d=document.querySelector('.detail-ct');if(d.style.display==='none'){d.style.display='flex';this.classList.add('open')}else{d.style.display='none';this.classList.remove('open')}});
+
+function openAlipay() {
+  window.location.href = url_scheme;
+}
+
+function checkPayment() {
+  var p = (new URLSearchParams(window.location.search)).get('price') || '0';
+  var prod = (new URLSearchParams(window.location.search)).get('product') || '';
+  window.location.href = 'index.html?paid=1&price=' + encodeURIComponent(p) + '&product=' + encodeURIComponent(prod);
+}
+
+document.querySelector('#orderDetail .arrow').addEventListener('click', function() {
+  var d = document.querySelector('.detail-ct');
+  if (d.style.display === 'none') {
+    d.style.display = 'flex';
+    this.classList.add('open');
+  } else {
+    d.style.display = 'none';
+    this.classList.remove('open');
+  }
+});
 </script>
 </body>
 </html>
