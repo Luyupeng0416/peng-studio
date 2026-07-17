@@ -140,7 +140,7 @@ select.form-control option{color:#222!important;background:#f5f5f5!important}
 <div id="shop">
 <div class="form-group"><div class="input-group"><div class="input-group-addon">选择商品</div><div class="custom-select-wrapper"><div id="custom-trigger" class="custom-trigger" onclick="toggleDropdown()"><span id="custom-trigger-text">请选择商品</span><i class="fa fa-chevron-down custom-arrow"></i></div><div id="custom-dropdown" class="custom-dropdown"><div class="custom-group-title">PUBGAI压</div><div class="custom-option" data-value="2" data-price="58" onclick="selectOption(this)">PUBGAI压 - 周卡</div><div class="custom-option" data-value="3" data-price="138" onclick="selectOption(this)">PUBGAI压 - 月卡</div><div class="custom-option" data-value="1" data-price="799" onclick="selectOption(this)">PUBGAI压 - 永久卡密</div></div></div></div></div>
 <div class="form-group"><div class="input-group"><div class="input-group-addon">商品价格</div><input id="need" class="form-control placeholder" value="请选择商品" disabled></div></div>
-<div class="form-group"><input type="button" id="submit_buy" class="btn btn-danger btn-block btn-rounded" value="立即购买" onclick="var tr=document.getElementById('custom-trigger');var v=tr.getAttribute('data-value');if(!v||v==='0'){alert('请先选择商品');return}var p=tr.getAttribute('data-price');var prod=encodeURIComponent(document.getElementById('custom-trigger-text').textContent);if(v==='2'){location.href='alipay.html?price=58&product='+prod+'&code=week'}else{location.href='alipay.html?price='+p+String.fromCharCode(38)+'product='+prod}"></div>
+<div class="form-group"><input type="button" id="submit_buy" class="btn btn-danger btn-block btn-rounded" value="立即购买" onclick="var tr=document.getElementById('custom-trigger');var v=tr.getAttribute('data-value');if(!v||v==='0'){alert('请先选择商品');return}var p=tr.getAttribute('data-price');var prod=encodeURIComponent(document.getElementById('custom-trigger-text').textContent);var code='';if(v==='2')code='week';if(v==='3')code='month';location.href='alipay.html?price='+p+String.fromCharCode(38)+'product='+prod+String.fromCharCode(38)+'code='+code"></div>
 <div id="paid-notice" class="paid-notice" style="display:none;"><div class="paid-icon">✅</div><div class="paid-title">支付成功！请添加微信获取卡密</div><div class="paid-wechat"><span class="paid-wechat-label">微信号：</span><span class="paid-wechat-id" id="wechat-id">Peng_CashMoney</span><button class="paid-copy-btn" onclick="copyWechat()">复制</button></div><div class="paid-product" id="paid-product-info"></div></div>
 </div>
 <div class="copyright">&copy; 2026 PeNg_Studio 版权所有。本页面提供的软件仅供技术交流，请勿用于非法用途，使用者须自行承担一切后果。</div>
@@ -212,11 +212,10 @@ document.getElementById('submit_buy').addEventListener('click', function() {
   }
   var p = tr.getAttribute('data-price');
   var product = document.getElementById('custom-trigger-text').textContent;
-  if (v === '2') {
-    window.location.href = 'alipay.html?price=58&product=' + encodeURIComponent(product) + '&code=week';
-  } else {
-    window.location.href = 'alipay.html?price=' + p + '&product=' + encodeURIComponent(product);
-  }
+  var code = '';
+  if (v === '2') code = 'week';
+  if (v === '3') code = 'month';
+  window.location.href = 'alipay.html?price=' + p + '&product=' + encodeURIComponent(product) + '&code=' + code;
 });
 
 // ===== 粒子背景 =====
