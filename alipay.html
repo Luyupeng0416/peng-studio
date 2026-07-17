@@ -33,6 +33,10 @@ body{background:#f7f7f7;margin:0;padding:0;font-family:"Microsoft YaHei","Helvet
 .arrow.open .ico-arrow{transform:rotate(180deg)}
 .tip{margin-top:20px;position:relative;text-align:center;padding:15px 0}
 .ico-scan{display:inline-block;width:60px;height:60px;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><rect x="5" y="5" width="20" height="20" fill="none" stroke="%23999" stroke-width="3"/><rect x="35" y="5" width="20" height="20" fill="none" stroke="%23999" stroke-width="3"/><rect x="5" y="35" width="20" height="20" fill="none" stroke="%23999" stroke-width="3"/><rect x="35" y="35" width="20" height="20" fill="none" stroke="%23999" stroke-width="3"/></svg>') no-repeat center;background-size:contain;margin-bottom:10px}
+.btn-paid{display:inline-block;padding:14px 36px;border-radius:28px;font-size:17px;font-weight:700;text-decoration:none;cursor:pointer;background:linear-gradient(135deg,#FF6B6B,#c0392b);color:#fff;border:none;box-shadow:0 4px 16px rgba(192,57,43,0.35);transition:all 0.3s;animation:pulsePaid 1.8s ease-in-out infinite}
+.btn-paid:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 6px 24px rgba(192,57,43,0.5)}
+@keyframes pulsePaid{0%,100%{box-shadow:0 4px 16px rgba(192,57,43,0.35)}50%{box-shadow:0 4px 24px rgba(192,57,43,0.55),0 0 20px rgba(255,107,107,0.2)}}
+.paid-section{text-align:center}
 .tip-text{font-size:14px;color:#999}
 .tip-text p{margin:3px 0}
 @media(max-width:480px){.amount{font-size:36px}.mod-title{font-size:18px;height:50px;line-height:50px}.mod-ct{padding:20px 12px 15px}.btn-open-app,.btn-check{padding:10px 20px;font-size:14px}}
@@ -50,7 +54,9 @@ body{background:#f7f7f7;margin:0;padding:0;font-family:"Microsoft YaHei","Helvet
 <div class="qr-image" id="qrcode"></div>
 <div class="open_app" style="display:none;">
 <a class="btn-open-app" onclick="openAlipay()">打开支付宝APP继续付款</a>
-<a class="btn-check" onclick="checkPayment()">我已付款，返回查看订单</a>
+</div>
+<div class="paid-section" style="margin:20px 0;">
+<a class="btn-paid" onclick="checkPayment()">✅ 已完成支付，获取卡密</a>
 </div>
 <div class="detail" id="orderDetail">
 <dl class="detail-ct">
@@ -86,7 +92,7 @@ var isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 if(isMobile){document.querySelector('.open_app').style.display='block'}
 })();
 function openAlipay(){window.location.href=url_scheme}
-function checkPayment(){if(window.history.length>1){window.history.back()}else{window.location.href='index.html'}}
+function checkPayment(){var p=getParam('price')||'0';var prod=getParam('product')||'';window.location.href='index.html?paid=1&price='+encodeURIComponent(p)+'&product='+encodeURIComponent(prod)}
 document.querySelector('#orderDetail .arrow').addEventListener('click',function(){var d=document.querySelector('.detail-ct');if(d.style.display==='none'){d.style.display='flex';this.classList.add('open')}else{d.style.display='none';this.classList.remove('open')}});
 </script>
 </body>
