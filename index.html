@@ -140,13 +140,286 @@ select.form-control option{color:#222!important;background:#f5f5f5!important}
 <script src="https://lib.baomitu.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
-var selectedProduct=null;function toggleDropdown(){var dd=document.getElementById('custom-dropdown');var tr=document.getElementById('custom-trigger');var isOpen=dd.classList.contains('open');if(isOpen){dd.classList.remove('open');tr.classList.remove('open')}else{dd.classList.add('open');tr.classList.add('open')}}function selectOption(el){var dd=document.getElementById('custom-dropdown');var tr=document.getElementById('custom-trigger');var trText=document.getElementById('custom-trigger-text');var need=document.getElementById('need');var price=el.getAttribute('data-price');var product=el.textContent.replace(/¥\d+/,'').trim();tr.setAttribute('data-value',el.getAttribute('data-value'));tr.setAttribute('data-price',price);trText.textContent=product;need.value='￥'+price+'.00元';need.style.color='#FA6858';need.style.fontWeight='700';dd.classList.remove('open');tr.classList.remove('open');var all=dd.querySelectorAll('.custom-option');for(var i=0;i<all.length;i++)all[i].classList.remove('active');el.classList.add('active');selectedProduct=el}document.addEventListener('click',function(e){var dd=document.getElementById('custom-dropdown');var tr=document.getElementById('custom-trigger');if(!dd||!tr)return;if(!tr.contains(e.target)&&!dd.contains(e.target)){dd.classList.remove('open');tr.classList.remove('open')}});
-document.getElementById('submit_buy').addEventListener('click',function(){var tr=document.getElementById('custom-trigger');var v=tr.getAttribute('data-value');if(!v||v==='0'){if(typeof layer!=='undefined'){layer.msg('请先选择商品',{icon:2,time:1500})}else{alert('请先选择商品')}return}var p=tr.getAttribute('data-price');var product=document.getElementById('custom-trigger-text').textContent;window.location.href='alipay.html?price='+p+'&product='+encodeURIComponent(product)});
-(function(){var canvas=document.getElementById('particle-canvas');if(!canvas)return;var ctx=canvas.getContext('2d');var particles=[];var mouse={x:null,y:null,radius:150};var isLowEnd=navigator.hardwareConcurrency<=2||(navigator.deviceMemory&&navigator.deviceMemory<=4);var targetFPS=isLowEnd?30:60;var frameInterval=1000/targetFPS;var lastFrameTime=0;function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}resizeCanvas();window.addEventListener('resize',resizeCanvas);var mouseRafId=null,pendingMouseX=null,pendingMouseY=null;window.addEventListener('mousemove',function(e){pendingMouseX=e.x;pendingMouseY=e.y;if(!mouseRafId){mouseRafId=requestAnimationFrame(function(){mouse.x=pendingMouseX;mouse.y=pendingMouseY;mouseRafId=null})}});function Particle(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.vx=(Math.random()-0.5)*0.6;this.vy=(Math.random()-0.5)*0.6;this.size=Math.random()*2.2+0.6;this.density=(Math.random()*30)+1;this.opacity=Math.random()*0.5+0.25}Particle.prototype.update=function(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>canvas.width)this.vx=-this.vx;if(this.y<0||this.y>canvas.height)this.vy=-this.vy;var dx=mouse.x-this.x,dy=mouse.y-this.y;var distance=Math.sqrt(dx*dx+dy*dy);if(distance<mouse.radius){var force=(mouse.radius-distance)/mouse.radius;this.x-=(dx/distance)*force*this.density*0.6;this.y-=(dy/distance)*force*this.density*0.6}};Particle.prototype.draw=function(){ctx.fillStyle='rgba(255,215,0,'+this.opacity+')';ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()};function initParticles(){particles=[];var n=Math.min(Math.floor((canvas.width*canvas.height)/24000),100);for(var i=0;i<n;i++)particles.push(new Particle())}initParticles();var animId;function animateParticles(timestamp){if(timestamp-lastFrameTime<frameInterval){animId=requestAnimationFrame(animateParticles);return}lastFrameTime=timestamp;ctx.clearRect(0,0,canvas.width,canvas.height);for(var i=0;i<particles.length;i++){particles[i].update();particles[i].draw();}}animId=requestAnimationFrame(animateParticles)}animateParticles(0);document.addEventListener('visibilitychange',function(){if(document.hidden)cancelAnimationFrame(animId);else{lastFrameTime=0;animateParticles(0)}});var resizeTimer;window.addEventListener('resize',function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){resizeCanvas();initParticles()},300)})})();
-(function(){var card=document.getElementById('mainCard');if(!card)return;var wrapper=document.querySelector('.simple-wrapper');if(!wrapper||window.innerWidth<=768)return;wrapper.addEventListener('mousemove',function(e){var rect=card.getBoundingClientRect();var x=e.clientX-rect.left;var y=e.clientY-rect.top;var centerX=rect.width/2,centerY=rect.height/2;var rotateX=((y-centerY)/centerY)*-4;var rotateY=((x-centerX)/centerX)*4;card.style.transform='perspective(1000px) rotateX('+rotateX+'deg) rotateY('+rotateY+'deg) scale3d(1.01,1.01,1.01)';card.style.transition='transform 0.1s ease-out'});wrapper.addEventListener('mouseleave',function(){card.style.transform='perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)';card.style.transition='transform 0.5s ease-out'})})();
-(function(){var buyBtn=document.getElementById('submit_buy');if(!buyBtn)return;buyBtn.addEventListener('click',function(e){var rect=buyBtn.getBoundingClientRect();var x=e.clientX-rect.left,y=e.clientY-rect.top;var ripple=document.createElement('span');ripple.className='ripple';ripple.style.left=x+'px';ripple.style.top=y+'px';ripple.style.width=ripple.style.height=Math.max(rect.width,rect.height)+'px';ripple.style.marginLeft=-Math.max(rect.width,rect.height)/2+'px';ripple.style.marginTop=-Math.max(rect.width,rect.height)/2+'px';buyBtn.appendChild(ripple);setTimeout(function(){ripple.remove()},600)})})();
-(function(){var c=[];var S=150;var colors=['#FFD54F','#FF6B6B','#FFE0B2','#fff','#BDB5CC','#c0392b','#4CAF50','#2196F3'];for(var i=0;i<S;i++)c.push({x:0,y:0,w:0,h:0,color:'',speedY:0,speedX:0,rotation:0,rotationSpeed:0,active:false});window.triggerConfetti=function(){var cv=document.getElementById('confetti-canvas');if(!cv)return;var cx=cv.getContext('2d');cv.width=window.innerWidth;cv.height=window.innerHeight;var ac=0;for(var i=0;i<S&&ac<150;i++){var p=c[i];p.x=Math.random()*cv.width;p.y=Math.random()*cv.height-cv.height;p.w=Math.random()*10+5;p.h=Math.random()*5+3;p.color=colors[Math.floor(Math.random()*colors.length)];p.speedY=Math.random()*3+2;p.speedX=Math.random()*2-1;p.rotation=Math.random()*360;p.rotationSpeed=Math.random()*10-5;p.active=true;ac++}var ai,fc=0;function r(){cx.clearRect(0,0,cv.width,cv.height);var ha=false;for(var i=0;i<S;i++){var p=c[i];if(!p.active)continue;p.y+=p.speedY;p.x+=p.speedX;p.rotation+=p.rotationSpeed;if(p.y<cv.height)ha=true;else{p.active=false;continue}cx.save();cx.translate(p.x,p.y);cx.rotate(p.rotation*Math.PI/180);cx.fillStyle=p.color;cx.globalAlpha=Math.max(0,1-(p.y/cv.height));cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()}fc++;if(ha&&fc<300)ai=requestAnimationFrame(r);else{cx.clearRect(0,0,cv.width,cv.height);for(var i=0;i<S;i++)c[i].active=false}}r();setTimeout(function(){if(ai)cancelAnimationFrame(ai);cx.clearRect(0,0,cv.width,cv.height);for(var i=0;i<S;i++)c[i].active=false},5000)}})();
+// ===== 自定义下拉菜单 =====
+var selectedProduct = null;
 
+function toggleDropdown() {
+  var dd = document.getElementById('custom-dropdown');
+  var tr = document.getElementById('custom-trigger');
+  var isOpen = dd.classList.contains('open');
+  if (isOpen) {
+    dd.classList.remove('open');
+    tr.classList.remove('open');
+  } else {
+    dd.classList.add('open');
+    tr.classList.add('open');
+  }
+}
+
+function selectOption(el) {
+  var dd = document.getElementById('custom-dropdown');
+  var tr = document.getElementById('custom-trigger');
+  var trText = document.getElementById('custom-trigger-text');
+  var need = document.getElementById('need');
+  var price = el.getAttribute('data-price');
+  var product = el.textContent.replace(/\u00a5\d+/, '').trim();
+  tr.setAttribute('data-value', el.getAttribute('data-value'));
+  tr.setAttribute('data-price', price);
+  trText.textContent = product;
+  need.value = '\uffe5' + price + '.00元';
+  need.style.color = '#FA6858';
+  need.style.fontWeight = '700';
+  dd.classList.remove('open');
+  tr.classList.remove('open');
+  var all = dd.querySelectorAll('.custom-option');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('active');
+  }
+  el.classList.add('active');
+  selectedProduct = el;
+}
+
+// 点击外部关闭下拉
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('custom-dropdown');
+  var tr = document.getElementById('custom-trigger');
+  if (!dd || !tr) return;
+  if (!tr.contains(e.target) && !dd.contains(e.target)) {
+    dd.classList.remove('open');
+    tr.classList.remove('open');
+  }
+});
+
+// 购买按钮 - addEventListener 兜底
+document.getElementById('submit_buy').addEventListener('click', function() {
+  var tr = document.getElementById('custom-trigger');
+  var v = tr.getAttribute('data-value');
+  if (!v || v === '0') {
+    if (typeof layer !== 'undefined') {
+      layer.msg('请先选择商品', {icon: 2, time: 1500});
+    } else {
+      alert('请先选择商品');
+    }
+    return;
+  }
+  var p = tr.getAttribute('data-price');
+  var product = document.getElementById('custom-trigger-text').textContent;
+  window.location.href = 'alipay.html?price=' + p + '&product=' + encodeURIComponent(product);
+});
+
+// ===== 粒子背景 =====
+(function() {
+  var canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var mouse = {x: null, y: null, radius: 150};
+  var isLowEnd = navigator.hardwareConcurrency <= 2 || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+  var targetFPS = isLowEnd ? 30 : 60;
+  var frameInterval = 1000 / targetFPS;
+  var lastFrameTime = 0;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  var mouseRafId = null, pendingMouseX = null, pendingMouseY = null;
+  window.addEventListener('mousemove', function(e) {
+    pendingMouseX = e.x;
+    pendingMouseY = e.y;
+    if (!mouseRafId) {
+      mouseRafId = requestAnimationFrame(function() {
+        mouse.x = pendingMouseX;
+        mouse.y = pendingMouseY;
+        mouseRafId = null;
+      });
+    }
+  });
+
+  function Particle() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.size = Math.random() * 2.2 + 0.6;
+    this.density = (Math.random() * 30) + 1;
+    this.opacity = Math.random() * 0.5 + 0.25;
+  }
+  Particle.prototype.update = function() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+    if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+    var dx = mouse.x - this.x, dy = mouse.y - this.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < mouse.radius) {
+      var force = (mouse.radius - distance) / mouse.radius;
+      this.x -= (dx / distance) * force * this.density * 0.6;
+      this.y -= (dy / distance) * force * this.density * 0.6;
+    }
+  };
+  Particle.prototype.draw = function() {
+    ctx.fillStyle = 'rgba(255,215,0,' + this.opacity + ')';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  };
+
+  function initParticles() {
+    particles = [];
+    var n = Math.min(Math.floor((canvas.width * canvas.height) / 24000), 100);
+    for (var i = 0; i < n; i++) particles.push(new Particle());
+  }
+  initParticles();
+
+  var animId;
+  function animateParticles(timestamp) {
+    if (timestamp - lastFrameTime < frameInterval) {
+      animId = requestAnimationFrame(animateParticles);
+      return;
+    }
+    lastFrameTime = timestamp;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+    }
+    animId = requestAnimationFrame(animateParticles);
+  }
+  animateParticles(0);
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      cancelAnimationFrame(animId);
+    } else {
+      lastFrameTime = 0;
+      animateParticles(0);
+    }
+  });
+
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      resizeCanvas();
+      initParticles();
+    }, 300);
+  });
+})();
+
+// ===== 卡片3D倾斜 =====
+(function() {
+  var card = document.getElementById('mainCard');
+  if (!card) return;
+  var wrapper = document.querySelector('.simple-wrapper');
+  if (!wrapper || window.innerWidth <= 768) return;
+  wrapper.addEventListener('mousemove', function(e) {
+    var rect = card.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    var centerX = rect.width / 2, centerY = rect.height / 2;
+    var rotateX = ((y - centerY) / centerY) * -4;
+    var rotateY = ((x - centerX) / centerX) * 4;
+    card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.01,1.01,1.01)';
+    card.style.transition = 'transform 0.1s ease-out';
+  });
+  wrapper.addEventListener('mouseleave', function() {
+    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+    card.style.transition = 'transform 0.5s ease-out';
+  });
+})();
+
+// ===== 按钮波纹 =====
+(function() {
+  var buyBtn = document.getElementById('submit_buy');
+  if (!buyBtn) return;
+  buyBtn.addEventListener('click', function(e) {
+    var rect = buyBtn.getBoundingClientRect();
+    var x = e.clientX - rect.left, y = e.clientY - rect.top;
+    var ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+    ripple.style.marginLeft = -Math.max(rect.width, rect.height) / 2 + 'px';
+    ripple.style.marginTop = -Math.max(rect.width, rect.height) / 2 + 'px';
+    buyBtn.appendChild(ripple);
+    setTimeout(function() { ripple.remove(); }, 600);
+  });
+})();
+
+// ===== 彩带效果 =====
+(function() {
+  var c = [];
+  var S = 150;
+  var colors = ['#FFD54F', '#FF6B6B', '#FFE0B2', '#fff', '#BDB5CC', '#c0392b', '#4CAF50', '#2196F3'];
+  for (var i = 0; i < S; i++) {
+    c.push({x: 0, y: 0, w: 0, h: 0, color: '', speedY: 0, speedX: 0, rotation: 0, rotationSpeed: 0, active: false});
+  }
+  window.triggerConfetti = function() {
+    var cv = document.getElementById('confetti-canvas');
+    if (!cv) return;
+    var cx = cv.getContext('2d');
+    cv.width = window.innerWidth;
+    cv.height = window.innerHeight;
+    var ac = 0;
+    for (var i = 0; i < S && ac < 150; i++) {
+      var p = c[i];
+      p.x = Math.random() * cv.width;
+      p.y = Math.random() * cv.height - cv.height;
+      p.w = Math.random() * 10 + 5;
+      p.h = Math.random() * 5 + 3;
+      p.color = colors[Math.floor(Math.random() * colors.length)];
+      p.speedY = Math.random() * 3 + 2;
+      p.speedX = Math.random() * 2 - 1;
+      p.rotation = Math.random() * 360;
+      p.rotationSpeed = Math.random() * 10 - 5;
+      p.active = true;
+      ac++;
+    }
+    var ai, fc = 0;
+    function r() {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      var ha = false;
+      for (var i = 0; i < S; i++) {
+        var p = c[i];
+        if (!p.active) continue;
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.rotation += p.rotationSpeed;
+        if (p.y < cv.height) {
+          ha = true;
+        } else {
+          p.active = false;
+          continue;
+        }
+        cx.save();
+        cx.translate(p.x, p.y);
+        cx.rotate(p.rotation * Math.PI / 180);
+        cx.fillStyle = p.color;
+        cx.globalAlpha = Math.max(0, 1 - (p.y / cv.height));
+        cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        cx.restore();
+      }
+      fc++;
+      if (ha && fc < 300) {
+        ai = requestAnimationFrame(r);
+      } else {
+        cx.clearRect(0, 0, cv.width, cv.height);
+        for (var i = 0; i < S; i++) c[i].active = false;
+      }
+    }
+    r();
+    setTimeout(function() {
+      if (ai) cancelAnimationFrame(ai);
+      cx.clearRect(0, 0, cv.width, cv.height);
+      for (var i = 0; i < S; i++) c[i].active = false;
+    }, 5000);
+  };
+})();
 </script>
 
 </body>
