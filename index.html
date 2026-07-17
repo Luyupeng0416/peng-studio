@@ -97,6 +97,16 @@ select.form-control option{color:#222!important;background:#f5f5f5!important}
 .custom-option:last-child{border-bottom:none}
 .custom-option:hover{background:rgba(255,215,0,0.08);color:#FFE0B2}
 .custom-option.active{background:rgba(255,215,0,0.1);color:#FFD54F;font-weight:600}
+.paid-notice{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,107,0.06));border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:22px 20px;margin-top:15px;text-align:center;animation:fadeUp 0.5s ease forwards}
+.paid-icon{font-size:40px;margin-bottom:8px}
+.paid-title{font-size:18px;font-weight:700;color:#FFD54F;margin-bottom:14px}
+.paid-wechat{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.paid-wechat-label{color:rgba(255,255,255,0.6);font-size:15px}
+.paid-wechat-id{font-size:22px;font-weight:700;color:#FFE0B2;background:rgba(255,255,255,0.08);padding:6px 16px;border-radius:8px;letter-spacing:0.5px}
+.paid-copy-btn{background:rgba(255,255,255,0.12);color:#FFE0B2;border:1px solid rgba(255,215,0,0.25);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.paid-copy-btn:hover{background:rgba(255,215,0,0.18);border-color:rgba(255,215,0,0.5);color:#FFD54F}
+.paid-copy-btn.copied{background:rgba(76,175,80,0.25);border-color:rgba(76,175,80,0.5);color:#4CAF50}
+.paid-product{font-size:13px;color:rgba(255,255,255,0.5)}
 
 @media(max-width:660px){.simple-wrapper{margin:0 16px}.simple-card{padding:29px 22px 34px;border-radius:20px}.site-title{font-size:29px}.site-subtitle{font-size:16px}.input-group-addon{min-width:80px;font-size:15px}.form-control{font-size:16px;height:42px}#submit_buy{font-size:19px!important;padding:13px!important}.copyright{font-size:12px;margin-top:20px;padding-top:12px;white-space:normal}.orb-4,.orb-5,.orb-6{display:none}}
 @media(max-width:480px){.simple-card{padding:22px 16px 26px}.site-title{font-size:24px}.site-subtitle{font-size:14px}.input-group-addon{min-width:64px;font-size:13px;padding:0 10px}.form-control{font-size:14px;height:37px;padding:5px 11px}#submit_buy{font-size:16px!important;padding:11px!important;border-radius:24px!important}.copyright{font-size:11px;margin-top:16px;padding-top:10px;white-space:normal}.privilege-list{padding:10px 14px;margin:2px 0 8px 0}.privilege-list .pr-title{font-size:15px}.privilege-list ul li{font-size:14px;padding:4px 0 4px 24px}.privilege-list ul li::before{font-size:12px;top:4px}.top-nav{top:12px;left:12px;gap:10px}.nav-link{padding:8px 18px;font-size:14px;border-radius:20px}}
@@ -131,6 +141,7 @@ select.form-control option{color:#222!important;background:#f5f5f5!important}
 <div class="form-group"><div class="input-group"><div class="input-group-addon">选择商品</div><div class="custom-select-wrapper"><div id="custom-trigger" class="custom-trigger" onclick="toggleDropdown()"><span id="custom-trigger-text">请选择商品</span><i class="fa fa-chevron-down custom-arrow"></i></div><div id="custom-dropdown" class="custom-dropdown"><div class="custom-group-title">PUBGAI压</div><div class="custom-option" data-value="2" data-price="58" onclick="selectOption(this)">PUBGAI压 - 周卡</div><div class="custom-option" data-value="3" data-price="128" onclick="selectOption(this)">PUBGAI压 - 月卡</div><div class="custom-option" data-value="1" data-price="799" onclick="selectOption(this)">PUBGAI压 - 永久卡密</div></div></div></div></div>
 <div class="form-group"><div class="input-group"><div class="input-group-addon">商品价格</div><input id="need" class="form-control placeholder" value="请选择商品" disabled></div></div>
 <div class="form-group"><input type="button" id="submit_buy" class="btn btn-danger btn-block btn-rounded" value="立即购买" onclick="var v=document.getElementById('custom-trigger').getAttribute('data-value');if(!v||v==='0'){alert('请先选择商品');return}var p=document.getElementById('custom-trigger').getAttribute('data-price');location.href='alipay.html?price='+p+String.fromCharCode(38)+'product='+encodeURIComponent(document.getElementById('custom-trigger-text').textContent)"></div>
+<div id="paid-notice" class="paid-notice" style="display:none;"><div class="paid-icon">✅</div><div class="paid-title">支付成功！请添加微信获取卡密</div><div class="paid-wechat"><span class="paid-wechat-label">微信号：</span><span class="paid-wechat-id" id="wechat-id">PeNg_Studio</span><button class="paid-copy-btn" onclick="copyWechat()">复制</button></div><div class="paid-product" id="paid-product-info"></div></div>
 </div>
 <div class="copyright">&copy; 2026 PeNg_Studio 版权所有。本页面提供的软件仅供技术交流，请勿用于非法用途，使用者须自行承担一切后果。</div>
 </div>
@@ -417,6 +428,56 @@ document.getElementById('submit_buy').addEventListener('click', function() {
     }, 5000);
   };
 })();
+
+// ===== 支付成功检测 =====
+(function() {
+  function getParam(n) {
+    var r = new RegExp('(^|&)' + n + '=([^&]*)(&|$)');
+    var m = window.location.search.substr(1).match(r);
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  var paid = getParam('paid');
+  if (paid === '1') {
+    var price = getParam('price') || '0';
+    var product = getParam('product') || '';
+    document.getElementById('shop').style.display = 'none';
+    document.getElementById('submit_buy').style.display = 'none';
+    var notice = document.getElementById('paid-notice');
+    notice.style.display = 'block';
+    if (product) {
+      document.getElementById('paid-product-info').textContent = '已购买：' + product + '  |  ￥' + price;
+    }
+    // 彩带
+    if (typeof triggerConfetti === 'function') triggerConfetti();
+  }
+})();
+
+// ===== 复制微信号 =====
+function copyWechat() {
+  var text = document.getElementById('wechat-id').textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.querySelector('.paid-copy-btn');
+      btn.textContent = '已复制!';
+      btn.classList.add('copied');
+      setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+    });
+  } else {
+    // Fallback for older browsers
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.querySelector('.paid-copy-btn');
+    btn.textContent = '已复制!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+  }
+}
 </script>
 
 </body>
