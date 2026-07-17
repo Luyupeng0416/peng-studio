@@ -22,9 +22,9 @@ body{ background:#ecedf0; }
 .nav-link.active{background:linear-gradient(135deg,rgba(255,107,107,0.4),rgba(192,57,43,0.35));border-color:rgba(255,107,107,0.6);color:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.3),0 0 20px rgba(255,107,107,0.25),inset 0 1px 0 rgba(255,255,255,0.1)}
 .nav-link.active:hover{background:linear-gradient(135deg,rgba(255,107,107,0.5),rgba(192,57,43,0.45));border-color:rgba(255,107,107,0.8);box-shadow:0 6px 25px rgba(0,0,0,0.4),0 0 30px rgba(255,107,107,0.35),inset 0 1px 0 rgba(255,255,255,0.15)}
 html,body{margin:0;padding:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Microsoft YaHei",sans-serif}
-body{background:url('purple_bg.jpg') no-repeat center center fixed!important;background-size:cover!important;background-color:#1a1a2e;display:flex;align-items:center;justify-content:center}
+body{background:url('purple_bg.jpg') no-repeat center center fixed!important;background-size:cover!important;background-color:#0a0a14;display:flex;align-items:center;justify-content:center}
 .simple-wrapper{width:100%;margin:0 24px;padding:0;perspective:1200px}
-.simple-card{background:rgba(18,18,25,0.82);-webkit-border-radius:24px;border:none;box-shadow:0 10px 48px rgba(0,0,0,0.45),inset 0 0 0 1px rgba(255,255,255,0.08);padding:38px 28px 43px;color:#fff;max-height:96vh;overflow-y:auto;transition:all 0.2s;position:relative;opacity:0;transform:translateY(40px) rotateX(8deg);animation:cardEnter 0.8s cubic-bezier(0.16,1,0.3,1) 0.15s forwards;will-change:transform,opacity}
+.simple-card{background:rgba(8,8,16,0.88);-webkit-border-radius:24px;border:none;box-shadow:0 10px 48px rgba(0,0,0,0.45),inset 0 0 0 1px rgba(255,255,255,0.08);padding:38px 28px 43px;color:#fff;max-height:96vh;overflow-y:auto;transition:all 0.2s;position:relative;opacity:0;transform:translateY(40px) rotateX(8deg);animation:cardEnter 0.8s cubic-bezier(0.16,1,0.3,1) 0.15s forwards;will-change:transform,opacity}
 .simple-card::-webkit-scrollbar{width:0}
 .simple-card::before{content:'';position:absolute;inset:0;border-radius:24px;padding:1.5px;background:linear-gradient(135deg,rgba(255,215,0,0.4),rgba(255,255,255,0.15),rgba(255,107,107,0.3),rgba(255,215,0,0.4));background-size:300% 300%;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:borderFlow 5s ease infinite;pointer-events:none;opacity:0.8}
 @keyframes borderFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -40,10 +40,10 @@ body{background:url('purple_bg.jpg') no-repeat center center fixed!important;bac
 @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
 .copyright{text-align:center;font-size:13px;color:rgba(255,255,255,0.4);margin-top:28px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);letter-spacing:0.5px;line-height:1.6;opacity:0;animation:fadeUp 0.5s ease 0.5s forwards;white-space:nowrap}
 #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;pointer-events:none}
-.ambient-orb{position:fixed;border-radius:50%;filter:blur(40px);pointer-events:none;z-index:-1;opacity:0.35;contain:layout paint}
-.orb-1{width:350px;height:350px;background:radial-gradient(circle,rgba(255,107,107,0.45),transparent 70%);top:-5%;left:-5%;animation:orbFloat1 8s ease-in-out infinite}
-.orb-2{width:280px;height:280px;background:radial-gradient(circle,rgba(255,215,0,0.3),transparent 70%);bottom:10%;right:-5%;animation:orbFloat2 7s ease-in-out infinite}
-.orb-3{width:200px;height:200px;background:radial-gradient(circle,rgba(189,181,204,0.35),transparent 70%);top:40%;left:50%;animation:orbFloat3 10s ease-in-out infinite}
+.ambient-orb{position:fixed;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:-1;opacity:0.22;contain:layout paint}
+.orb-1{width:400px;height:400px;background:radial-gradient(circle,rgba(255,107,107,0.3),transparent 70%);top:-8%;left:-8%;animation:orbFloat1 8s ease-in-out infinite}
+.orb-2{width:320px;height:320px;background:radial-gradient(circle,rgba(255,215,0,0.2),transparent 70%);bottom:8%;right:-8%;animation:orbFloat2 7s ease-in-out infinite}
+.orb-3{width:180px;height:180px;background:radial-gradient(circle,rgba(140,130,180,0.2),transparent 70%);top:40%;left:50%;animation:orbFloat3 10s ease-in-out infinite}
 .orb-4{width:250px;height:250px;background:radial-gradient(circle,rgba(168,130,255,0.3),transparent 70%);bottom:-8%;left:20%;animation:orbFloat4 9s ease-in-out infinite}
 .orb-5{width:180px;height:180px;background:radial-gradient(circle,rgba(100,220,220,0.25),transparent 70%);top:10%;right:15%;animation:orbFloat5 6.5s ease-in-out infinite}
 .orb-6{width:220px;height:220px;background:radial-gradient(circle,rgba(255,150,200,0.28),transparent 70%);top:60%;left:-3%;animation:orbFloat6 11s ease-in-out infinite}
